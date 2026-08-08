@@ -10,11 +10,58 @@ function initMap() {
     scrollWheelZoom: true
   });
 
-  // OpenStreetMap 底图（国外可访问）
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map);
+  // 多源底图：优先 CartoDB（快速稳定），OSM 兜底
+  const baseLayers = [
+    {
+      name: 'CartoDB（快）',
+      url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+      options: { maxZoom: 20, subdomains: 'abcd' }
+    },
+    {
+      name: 'OSM（备用）',
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      options: { maxZoom: 19 }
+    },
+    {
+      name: 'OpenTopoMap（备用2）',
+      url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+      options: { maxZoom: 17 }
+    }
+  ];
+
+  // 逐个尝试加载，失败则回退到下一个源
+  let currentTile = null;
+  function tryBaseLayer(idx) {
+    if (idx >= baseLayers.length) return;
+    const layer = baseLayers[idx];
+    if (currentTile) map.removeLayer(currentTile);
+    currentTile = L.tileLayer(layer.url, Object.assign({
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }, layer.options)).addTo(map);
+
+    // 检测瓦片是否加载成功
+    let failed = false;
+    currentTile.on('tileerror', () => {
+      if (!failed) {
+        failed = true;
+        console.warn(`地图源 ${layer.name} 加载失败，切换备用源...`);
+        setTimeout(() => tryBaseLayer(idx + 1), 500);
+      }
+    });
+    // 给一个超时保护：3秒后如果没有瓦片成功，也切换
+    setTimeout(() => {
+      if (!failed) {
+        const tiles = document.querySelectorAll('.leaflet-tile');
+        const loaded = Array.from(tiles).some(t => t.complete && t.naturalWidth > 0);
+        if (!loaded) {
+          failed = true;
+          console.warn(`地图源 ${layer.name} 超时，切换备用源...`);
+          tryBaseLayer(idx + 1);
+        }
+      }
+    }, 3000);
+  }
+  tryBaseLayer(0);
 
   // 添加标记
   restaurants.forEach((r, idx) => addMarker(r, idx));
@@ -167,7 +214,10 @@ function openDetail(r) {
       scrollWheelZoom: false,
       attributionControl: false
     });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mini);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      maxZoom: 20,
+      subdomains: 'abcd'
+    }).addTo(mini);
     L.marker([r.lat, r.lng]).addTo(mini).bindPopup(r.name).openPopup();
     const label = document.getElementById('miniMapLabel');
     if (label) label.textContent = `📍 ${r.address || r.name}`;
