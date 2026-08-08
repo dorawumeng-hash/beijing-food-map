@@ -100,5 +100,36 @@ const restaurants = [
       "images/restaurant-4/img-10.jpg"
     ],
     link: "https://www.xiaohongshu.com/discovery/item/69031853000000000301e7fc"
+  },
+  {
+    name: "京兆尹（雍和宫店）",
+    category: "pretty",
+    lat: 39.9470,
+    lng: 116.4160,
+    address: "雍和宫对面（五道营）",
+    price: "高端素食（米其林二星+绿星+黑珍珠二钻）",
+    desc: "米其林二星+绿星+黑珍珠二钻素食餐厅，位于雍和宫对面，四合院里朴素东方美学。庭院私密端庄，中央有竖琴演奏。\n· 上品菜单每道配不同饮品\n· 开场果蔬蘸酱（百合超甜糯）\n· 羊肚菌珍味、野生红菇汤\n· 雪莲子美人米、山药核桃菌\n· 桃胶山珍焖瓦罐（像素佛跳墙）\n· 牛肝菌藜麦派（有惠灵顿之感）\n· 黑松露麻豆腐、果木炭烤鲜笋\n· 高原松露汤包、老北京炸酱面\n· 宫廷桂花奶酪等茶点\n整场体验像是在四合院里安静品味果蔬本味，带有京味儿的朴素味道。",
+    tags: ["素食", "米其林", "四合院", "东方美学", "仪式感"],
+    images: [
+      "images/restaurant-5/img-01.jpg",
+      "images/restaurant-5/img-02.jpg",
+      "images/restaurant-5/img-03.jpg",
+      "images/restaurant-5/img-04.jpg",
+      "images/restaurant-5/img-05.jpg",
+      "images/restaurant-5/img-06.jpg",
+      "images/restaurant-5/img-07.jpg",
+      "images/restaurant-5/img-08.jpg",
+      "images/restaurant-5/img-09.jpg",
+      "images/restaurant-5/img-10.jpg",
+      "images/restaurant-5/img-11.jpg",
+      "images/restaurant-5/img-12.jpg",
+      "images/restaurant-5/img-13.jpg",
+      "images/restaurant-5/img-14.jpg",
+      "images/restaurant-5/img-15.jpg",
+      "images/restaurant-5/img-16.jpg",
+      "images/restaurant-5/img-17.jpg",
+      "images/restaurant-5/img-18.jpg"
+    ],
+    link: "https://www.xiaohongshu.com/discovery/item/6a675cf5000000000f029483"
   }
 ];
